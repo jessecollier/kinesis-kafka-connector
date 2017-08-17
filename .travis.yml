@@ -1,18 +1,11 @@
 language: java
 dist: trusty
 sudo: false
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
-jdk:
-  - oraclejdk8
-script: 
-  - jdk_switcher use oraclejdk8
-  - mvn clean package
 before_deploy:
   - export $(printf 'VERSION=${project.version}\n0\n' | mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate | grep '^VERSION')
-  - tar -C target/ -cvzf kafka-connect-kinesis-${TRAVIS_TAG}.tar.gz amazon-kinesis-kafka-connector-${VERSION}.jar
+  - cd /home/travis/.m2/repository/com/amazonaws/amazon-kinesis-kafka-connecter/$VERSION/
+  - ls -alh .
+  - tar -cvzf amazon-kinesis-kafka-connecter-${TRAVIS_TAG}.tar.gz amazon-kinesis-kafka-connecter-${VERSION}.jar
 deploy:
   provider: releases
   api_key:
