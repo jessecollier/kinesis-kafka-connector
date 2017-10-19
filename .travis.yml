@@ -1,0 +1,15 @@
+language: java
+dist: trusty
+sudo: false
+before_deploy:
+  - export $(printf 'VERSION=${project.version}\n0\n' | mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate | grep '^VERSION')
+  - tar -C target/ -cvzf amazon-kinesis-kafka-connecter-${TRAVIS_TAG}.tar.gz amazon-kinesis-kafka-connecter-${VERSION}.jar
+deploy:
+  provider: releases
+  api_key:
+    secure: GtWTpRZjEsTF4aB3AF2tz4P96iF5zg/ZLzwhSpOcuzoNAT9AEtWYJG9PTAfF5pAPvmpXdAbzW9Oa4jzyDVLjHx9tP3PMZaTbnNZ25ni1BpymLaGgxIDAgOpoWMkx17/7hdiyHr/d4BSDCdRN9dHlRDf7r3oQ4+MOYe8SJkRHun01QevnqWgGQEjctrbQGqLMlLUH+TdvVxP+hjFK0Kn/QFXj2j8LCH15v518DR9mm0yVw6ejTv8F2PODF7JZ+wwE4mjjWzdDfyV+1hDliChN+m2YIOTv4TCquR/p1ABm/rHAE+pSPgPR68ow9H/vulPud8lxE8SXMUp9atzqH0JmFT2tyKnk2AxQrz0nDswBKfQpQh5xrKZnpCToYRPicDhEvDuQOzyKZg2yhAq/NjpR43b+jagSc1xhwY0FTtD0ynbrj1xmwM/4CvKTfX53XiC9vFE/1E1MZi9LvG05OJSPhfqr8SvxewVNDYHp3HGmJJ9IkyfdUfV4KQdd7fT6tY9OE41U4WVnXLNNNzPhEhiZuYT1G5JZXx5LBH+JHM0nX0O6TD64tAhjChArNkoskXhB+Aw0XVSKebUO8PXa+RZJFTQgaQ3hazQInrCQlqb7aezJuOZAOrlRASxXkgGX0ob4jsIRxHnTNbaweQ4Sm71IRrXCSpDGn5b72tF5J4+/s7M=
+  file: amazon-kinesis-kafka-connecter-${TRAVIS_TAG}.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: jessecollier/kinesis-kafka-connector
