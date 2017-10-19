@@ -79,7 +79,9 @@ public class AmazonKinesisSinkTask extends SinkTask {
 	@Override
 	public void flush(Map<TopicPartition, OffsetAndMetadata> arg0) {
 		// TODO Auto-generated method stub
-		kinesisProducer.flush();
+		// Setting to Synchronous Flush instead of Async
+		// https://github.com/awslabs/kinesis-kafka-connector/issues/2
+		kinesisProducer.flushSync();
 	}
 
 	@Override
