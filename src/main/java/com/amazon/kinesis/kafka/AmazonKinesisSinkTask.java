@@ -2,6 +2,7 @@ package com.amazon.kinesis.kafka;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
@@ -46,6 +47,10 @@ public class AmazonKinesisSinkTask extends SinkTask {
 	private boolean usePartitionAsHashKey;
 
 	private KinesisProducer kinesisProducer;
+
+	private int partitionKeysCount = 1_000_000;
+
+	private Random random = new Random();
 	
 
 	final FutureCallback<UserRecordResult> callback = new FutureCallback<UserRecordResult>() {
@@ -87,7 +92,7 @@ public class AmazonKinesisSinkTask extends SinkTask {
 				partitionKey =  sinkRecord.key().toString().trim();
 			}	
 			else{
-				partitionKey = Integer.toString(sinkRecord.kafkaPartition());
+				partitionKey = Integer.toString(random.nextInt(partitionKeysCount));
 			}
 			// If configured use kafka partition key as explicit hash key
 			// This will be useful when sending data from same partition into
